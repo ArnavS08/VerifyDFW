@@ -1,0 +1,10 @@
+{
+  "claim_text": "string",
+  "extracted_location": "string",
+  "claim_type": "tornado_touchdown | siren_malfunction | flooding | power_outage | other",
+  "verdict": "confirmed | unverified | contradicted",
+  "confidence": "high | medium | low",
+  "explanation": "string",
+  "sources": ["string"],
+  "safety_disclaimer": "string"
+}
