@@ -3,10 +3,13 @@
  * Multi-source data aggregation for DFW emergency tracking
  */
 
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import nwsRoutes from './routes/nws.js';
 import mockRoutes from './routes/mock.js';
+import verifyRoutes from './routes/verify.js';
+import usgsRoutes from './routes/usgs.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -24,6 +27,8 @@ app.use((req, res, next) => {
 // Routes
 app.use('/api/nws', nwsRoutes);
 app.use('/api/mock', mockRoutes);
+app.use('/api/verify', verifyRoutes);
+app.use('/api/usgs', usgsRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
