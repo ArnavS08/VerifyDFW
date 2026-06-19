@@ -36,7 +36,7 @@ type Scene = { url: string; label: string; keywords: string[] };
 const BG_SCENES: Scene[] = [
   {
     keywords: ["tornado", "funnel", "twister", "rotation", "wedge", "touchdown"],
-    url: "https://images.unsplash.com/photo-1504608524841-42584120d176?auto=format&fit=crop&w=1920&q=80",
+    url: "https://images.unsplash.com/photo-1527482797697-8795b05a13fe?auto=format&fit=crop&w=1920&q=80",
     label: "Tornado",
   },
   {
@@ -80,7 +80,7 @@ function detectScene(text: string): Scene | null {
 // ── Component ─────────────────────────────────────────────────────────────────
 export default function Home() {
   const [inputText, setInputText] = useState("");
-  const [result, setResult] = useState<VerifyResponse | null>(MOCK_RESULT);
+  const [result, setResult] = useState<VerifyResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -93,16 +93,19 @@ export default function Home() {
     setError(null);
     setResult(null);
     try {
-      // ── Phase 4: replace stub with real fetch ──────────────────────
-      // const res = await fetch("/api/verify", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify({ claim_text: inputText }),
-      // });
-      // if (!res.ok) throw new Error(`Server error: ${res.status}`);
-      // setResult(await res.json());
-      await new Promise((r) => setTimeout(r, 1200));
-      setResult({ ...MOCK_RESULT, claim_text: inputText });
+      const res = await fetch("/api/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ claim_text: inputText }),
+      });
+
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error || `Server error: ${res.status}`);
+      }
+
+      const data = await res.json();
+      setResult(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong. Try again.");
     } finally {

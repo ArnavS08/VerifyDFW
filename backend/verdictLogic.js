@@ -142,7 +142,7 @@ function resolveWeatherClaim({ claim_type, nwsAlerts, pdIncidents, usgsFlood, so
   return {
     verdict:    'unverified',
     confidence: 'low',
-    explanation: `No active NWS ${claim_type === 'tornado_touchdown' ? 'tornado' : 'flood'} warning is currently on record for this location. Treat as unverified until official confirmation. Do not assume it is safe.`,
+    explanation: `No active NWS ${claim_type === 'tornado_touchdown' ? 'tornado' : 'flood'} warning is currently on record for this location. This claim could not be confirmed at this time. As always, we recommend staying informed through official NWS and local emergency channels. This analysis does not constitute a safety clearance.`,
     sources,
   };
 }

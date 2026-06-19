@@ -120,7 +120,7 @@ export const DFW_LOCATIONS = {
  * Texas NWS Zone Mapping for DFW Metro
  */
 export const TEXAS_NWS_ZONES = {
-  TXZ103: "Dallas County",
+  TXZ103: "Dallas/Denton County",
   TXZ104: "Collin County",
   TXZ119: "Tarrant County",
   TXZ120: "Rockwall County",
@@ -129,6 +129,7 @@ export const TEXAS_NWS_ZONES = {
 
 /**
  * Find location by user text input
+ * Uses alias matching first, then fuzzy keyword matching as fallback
  * @param {string} locationText - User-provided location text
  * @returns {object|null} Matched location object or null
  */
@@ -137,13 +138,42 @@ export function findLocationByText(locationText) {
   
   const normalizedInput = locationText.toLowerCase().trim();
   
-  // Search through all locations and their aliases
+  // Pass 1: exact alias match
   for (const [key, location] of Object.entries(DFW_LOCATIONS)) {
     if (location.aliases.some(alias => normalizedInput.includes(alias))) {
       return { id: key, ...location };
     }
   }
-  
+
+  // Pass 2: fuzzy — check if the location name itself appears in the input
+  for (const [key, location] of Object.entries(DFW_LOCATIONS)) {
+    if (normalizedInput.includes(location.name.toLowerCase())) {
+      return { id: key, ...location };
+    }
+  }
+
+  // Pass 3: well-known DFW landmarks / roads → map to nearest city
+  const LANDMARK_MAP = [
+    { keywords: ['stonebriar', 'warren parkway', 'main street frisco', 'frisco square'], location: 'frisco' },
+    { keywords: ['legacy drive', 'legacy west', 'legacy town', 'preston road', 'central expressway plano', 'willow bend'], location: 'plano' },
+    { keywords: ['uptown', 'deep ellum', 'lower greenville', 'bishop arts', 'oak cliff', 'fair park', 'city hall'], location: 'downtown_dallas' },
+    { keywords: ['at&t stadium', 'globe life', 'six flags', 'arlington highlands'], location: 'arlington' },
+    { keywords: ['sundance square', 'cultural district', 'stockyards', 'west 7th'], location: 'fort_worth' },
+    { keywords: ['las colinas', 'toyota music factory', 'irving mall'], location: 'irving' },
+    { keywords: ['collin county', 'west plano', 'north plano', 'east plano'], location: 'plano' },
+    { keywords: ['mckinney avenue', 'allen', 'prosper'], location: 'mckinney' },
+    { keywords: ['denton county', 'university of north texas', 'unt', 'flower mound', 'lewisville'], location: 'denton' },
+    { keywords: ['rowlett', 'sachse', 'wylie'], location: 'garland' },
+    { keywords: ['balch springs', 'sunnyvale', 'forney'], location: 'mesquite' },
+  ];
+
+  for (const entry of LANDMARK_MAP) {
+    if (entry.keywords.some(kw => normalizedInput.includes(kw))) {
+      const loc = DFW_LOCATIONS[entry.location];
+      return { id: entry.location, ...loc };
+    }
+  }
+
   return null;
 }
 
