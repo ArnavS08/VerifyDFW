@@ -92,6 +92,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const [copied, setCopied] = useState(false);
   const [tweetHtml, setTweetHtml] = useState<string | null>(null);
   const [tweetText, setTweetText] = useState<string | null>(null);
   const [tweetAuthor, setTweetAuthor] = useState<string | null>(null);
@@ -285,7 +286,7 @@ export default function Dashboard() {
               >
                 <div className="flex items-center justify-between">
                   <label htmlFor="claim-input" className="text-sm font-semibold text-slate-200">
-                    Enter the claim you heard
+                    Paste a rumor before you forward it
                   </label>
                   <span className="text-xs text-slate-600 tabular-nums">{inputText.length} / 500</span>
                 </div>
@@ -417,9 +418,26 @@ export default function Dashboard() {
             </div>
 
             {/* Right — Results */}
-            <div className="lg:sticky lg:top-24">
+            <div className="lg:sticky lg:top-24 space-y-3">
               {result ? (
-                <StatusPanel result={result} />
+                <>
+                  <StatusPanel result={result} />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const verdictLabel = result.verdict === "confirmed" ? "CONFIRMED" : result.verdict === "contradicted" ? "CONTRADICTED" : "UNVERIFIED";
+                      const msg = `[VerifyDFW] "${claimText.slice(0, 120)}${claimText.length > 120 ? "…" : ""}" — ${verdictLabel} (${result.confidence} confidence). ${result.explanation} Source: ${result.sources[0] ?? "weather.gov/fwd"}. Do not forward unverified claims.`;
+                      navigator.clipboard.writeText(msg).then(() => {
+                        setCopied(true);
+                        setTimeout(() => setCopied(false), 2000);
+                      });
+                    }}
+                    className="w-full rounded-sm py-2.5 text-xs font-medium text-slate-400 hover:text-slate-200 transition-colors border border-white/[0.07] hover:border-white/20"
+                    style={{ background: "rgba(10,15,30,0.5)" }}
+                  >
+                    {copied ? "Copied to clipboard" : "Copy result to share with your group"}
+                  </button>
+                </>
               ) : (
                 <div
                   className="rounded-md p-10 flex flex-col items-center justify-center text-center gap-5 min-h-[360px]"
