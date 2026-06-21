@@ -239,7 +239,8 @@ export default function Dashboard() {
                   When a storm warning spreads through your WhatsApp group or Nextdoor feed,
                   get an instant cross-reference against live{" "}
                   <span className="text-slate-200 font-medium">NWS Fort Worth</span>,{" "}
-                  <span className="text-slate-200 font-medium">ERCOT grid</span>, and{" "}
+                  <span className="text-slate-200 font-medium">ERCOT grid</span>,{" "}
+                  <span className="text-slate-200 font-medium">USGS stream gauges</span>, and{" "}
                   <span className="text-slate-200 font-medium">local PD feeds</span>.
                 </p>
 

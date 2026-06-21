@@ -103,11 +103,20 @@ export default function Landing() {
             >
               When a storm warning spreads through your neighborhood, you need
               truth. Cross-reference any emergency claim against live
-              NWS, ERCOT, and local PD data in seconds.
+              NWS, ERCOT, USGS, and local PD data in seconds.
             </p>
 
+            <button
+              type="button"
+              onClick={() => router.push("/dashboard")}
+              className="mt-10 rounded-sm px-10 py-3.5 text-sm font-semibold text-white transition-opacity hover:opacity-80 active:opacity-60 focus:outline-none"
+              style={{ background: "#1a56db", letterSpacing: "0.01em" }}
+            >
+              Verify a Claim
+            </button>
+
             <div
-              className="mt-10 max-w-md text-left px-7 py-6 rounded-md"
+              className="mt-8 max-w-md text-left px-7 py-6 rounded-md"
               style={{ background: "rgba(8,12,28,0.6)", border: "1px solid rgba(255,255,255,0.07)", backdropFilter: "blur(18px)" }}
             >
               <p className="text-xs font-semibold text-rose-400 uppercase mb-3" style={{ letterSpacing: "0.14em" }}>
@@ -123,16 +132,7 @@ export default function Landing() {
               </p>
             </div>
 
-            <button
-              type="button"
-              onClick={() => router.push("/dashboard")}
-              className="mt-9 rounded-sm px-10 py-3.5 text-sm font-semibold text-white transition-opacity hover:opacity-80 active:opacity-60 focus:outline-none"
-              style={{ background: "#1a56db", letterSpacing: "0.01em" }}
-            >
-              Verify a Claim
-            </button>
-
-            <p className="mt-4 text-xs text-slate-600" style={{ letterSpacing: "0.02em" }}>
+            <p className="mt-5 text-xs text-slate-600" style={{ letterSpacing: "0.02em" }}>
               Not an official emergency broadcast &nbsp;·&nbsp; Always follow local emergency management
             </p>
           </main>
