@@ -230,14 +230,14 @@ export default function Dashboard() {
                   className="text-4xl font-bold text-white leading-tight"
                   style={{ letterSpacing: "-0.03em" }}
                 >
-                  Is what your neighborhood<br />
+                  Is what your community <br />
                   <span className="text-slate-400">is saying actually</span>{" "}
                   <span className="text-sky-400">true?</span>
                 </h2>
 
                 <p className="text-slate-400 text-sm leading-relaxed max-w-md font-light">
                   When a storm warning spreads through your WhatsApp group or Nextdoor feed,
-                  get an instant cross-reference against live{" "}
+                  get an instant cross-reference against{" "}
                   <span className="text-slate-200 font-medium">NWS Fort Worth</span>,{" "}
                   <span className="text-slate-200 font-medium">ERCOT grid</span>,{" "}
                   <span className="text-slate-200 font-medium">USGS stream gauges</span>, and{" "}
@@ -247,7 +247,7 @@ export default function Dashboard() {
                 {/* Stats */}
                 <div className="flex gap-8 pt-1">
                   {[
-                    { value: "3", label: "Live Data Sources" },
+                    { value: "4", label: "Data Sources" },
                     { value: "DFW", label: "Metroplex Coverage" },
                     { value: "~2s", label: "Response Time" },
                   ].map((s) => (
