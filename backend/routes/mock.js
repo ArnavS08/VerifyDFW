@@ -1,8 +1,3 @@
-/**
- * Infrastructure Mock Routes
- * Clean mock functions for local PD logs and ERCOT status
- */
-
 import express from 'express';
 import { DFW_LOCATIONS, findLocationByText } from '../config/dfwCoordinates.js';
 

@@ -1,8 +1,3 @@
-/**
- * NWS Live Connection Routes
- * Asynchronous HTTP data retrieval from National Weather Service
- */
-
 import express from 'express';
 import axios from 'axios';
 import { DFW_LOCATIONS, TEXAS_NWS_ZONES, findLocationByText } from '../config/dfwCoordinates.js';

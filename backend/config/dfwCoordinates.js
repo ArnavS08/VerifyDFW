@@ -1,8 +1,3 @@
-/**
- * DFW Regional Coordinates Matrix
- * Precise latitude, longitude, and NWS grid zones for prominent DFW areas
- */
-
 export const DFW_LOCATIONS = {
   frisco: {
     name: "Frisco",
@@ -127,67 +122,37 @@ export const TEXAS_NWS_ZONES = {
   TXZ121: "Denton County"
 };
 
-/**
- * Find location by user text input
- * @param {string} locationText - User-provided location text
- * @returns {object|null} Matched location object or null
- */
 export function findLocationByText(locationText) {
   if (!locationText) return null;
-  
   const normalizedInput = locationText.toLowerCase().trim();
-  
-  // Search through all locations and their aliases
   for (const [key, location] of Object.entries(DFW_LOCATIONS)) {
     if (location.aliases.some(alias => normalizedInput.includes(alias))) {
       return { id: key, ...location };
     }
   }
-  
   return null;
 }
 
-/**
- * Get all locations within a specific county
- * @param {string} county - County name
- * @returns {array} Array of locations in that county
- */
 export function getLocationsByCounty(county) {
   return Object.entries(DFW_LOCATIONS)
     .filter(([_, location]) => location.county === county)
     .map(([id, location]) => ({ id, ...location }));
 }
 
-/**
- * Calculate distance between two coordinates (Haversine formula)
- * @param {number} lat1 - Latitude of point 1
- * @param {number} lon1 - Longitude of point 1
- * @param {number} lat2 - Latitude of point 2
- * @param {number} lon2 - Longitude of point 2
- * @returns {number} Distance in miles
- */
-export function calculateDistance(lat1, lon1, lat2, lon2) {
-  const R = 3959; // Earth's radius in miles
+function calculateDistance(lat1, lon1, lat2, lon2) {
+  const R = 3959;
   const dLat = (lat2 - lat1) * Math.PI / 180;
   const dLon = (lon2 - lon1) * Math.PI / 180;
-  const a = 
+  const a =
     Math.sin(dLat/2) * Math.sin(dLat/2) +
     Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
     Math.sin(dLon/2) * Math.sin(dLon/2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-  return R * c;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 }
 
-/**
- * Find nearest location to given coordinates
- * @param {number} latitude - Target latitude
- * @param {number} longitude - Target longitude
- * @returns {object} Nearest location with distance
- */
 export function findNearestLocation(latitude, longitude) {
   let nearest = null;
   let minDistance = Infinity;
-  
   for (const [id, location] of Object.entries(DFW_LOCATIONS)) {
     const distance = calculateDistance(latitude, longitude, location.latitude, location.longitude);
     if (distance < minDistance) {
@@ -195,6 +160,5 @@ export function findNearestLocation(latitude, longitude) {
       nearest = { id, ...location, distance };
     }
   }
-  
   return nearest;
 }

@@ -6,7 +6,7 @@ import StatusPanel from "@/components/StatusPanel";
 import type { VerifyResponse } from "@/components/StatusPanel";
 
 const EXAMPLES = [
-  "Tornado touched down near Stonebriar Centre mall — sirens going off everywhere",
+  "Tornado touched down near Stonebriar Centre mall , sirens going off everywhere",
   "Frisco emergency sirens have been looping for 20 minutes, no official update",
   "Flash flooding on Preston Road near Legacy Drive, cars stranded",
   "ERCOT rolling blackouts hitting West Plano right now",
@@ -97,11 +97,20 @@ export default function Dashboard() {
   const [tweetText, setTweetText] = useState<string | null>(null);
   const [tweetAuthor, setTweetAuthor] = useState<string | null>(null);
   const [tweetFetching, setTweetFetching] = useState(false);
+  const [userCoords, setUserCoords] = useState<{ lat: number; lon: number } | null>(null);
   const tweetRef = useRef<HTMLDivElement>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const claimText = tweetText ?? inputText;
   const bgUrl = useMemo(() => detectBg(claimText), [claimText]);
+
+  useEffect(() => {
+    if (!navigator.geolocation) return;
+    navigator.geolocation.getCurrentPosition(
+      (pos) => setUserCoords({ lat: pos.coords.latitude, lon: pos.coords.longitude }),
+      () => {}
+    );
+  }, []);
 
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
@@ -149,7 +158,7 @@ export default function Dashboard() {
       const res = await fetch("/api/verify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ claim_text: claimText }),
+        body: JSON.stringify({ claim_text: claimText, ...(userCoords ?? {}) }),
       });
 
       if (!res.ok) {

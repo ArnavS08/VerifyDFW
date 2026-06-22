@@ -1,11 +1,3 @@
-/**
- * USGS Real-Time Stream Gauge Route
- * Fetches live gage height data for DFW-area waterways.
- * Uses the USGS Water Data OGC API (api.waterdata.usgs.gov).
- *
- * Parameter code 00065 = gage height in feet.
- * Flood stage thresholds sourced from NWS Advanced Hydrologic Prediction Service.
- */
 
 import express from 'express';
 import axios from 'axios';
